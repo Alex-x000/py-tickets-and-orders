@@ -7,8 +7,8 @@ def create_user(username: str, password: str, email: str = None,
     user = User.objects.create_user(username=username,
                                     password=password,
                                     email=email,
-                                    first_name=first_name,
-                                    last_name=last_name)
+                                    first_name=first_name or "",
+                                    last_name=last_name or "")
     return user
 
 
