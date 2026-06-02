@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from db.models import Order, Ticket
+from django.utils.dateparse import parse_datetime
 User = get_user_model()
 
 
@@ -8,6 +9,12 @@ User = get_user_model()
 def create_order(tickets: list, username: str, date: str = None) -> Order:
     user = User.objects.get(username=username)
     order = Order.objects.create(created_at=date, user=user)
+
+    if date:
+        from django.utils.dateparse import parse_datetime
+        order.created_at = parse_datetime(date)
+        order.save(update_fields=["created_at"])
+
     for data in tickets:
         Ticket.objects.create(movie_session_id=data["movie_session"],
                               order=order,
