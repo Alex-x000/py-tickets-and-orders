@@ -56,14 +56,14 @@ class MovieSession(models.Model):
 
 
 class Order(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
     user = models.ForeignKey("User", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return f"<Order: {self.created_at}>"
+        return f"{self.created_at}"
 
 
 class Ticket(models.Model):
@@ -83,9 +83,9 @@ class Ticket(models.Model):
         ]
 
     def __str__(self) -> str:
-        return (f"<Ticket: {self.movie_session.movie.title} "
+        return (f"{self.movie_session.movie.title} "
                 f"{self.movie_session.show_time} (row: {self.row}, "
-                f"seat: {self.seat})>")
+                f"seat: {self.seat})")
 
     def clean(self) -> None:
         max_rows = self.movie_session.cinema_hall.rows
