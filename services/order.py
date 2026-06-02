@@ -8,11 +8,8 @@ User = get_user_model()
 @transaction.atomic
 def create_order(tickets: list, username: str, date: str = None) -> Order:
     user = User.objects.get(username=username)
-    order = Order.objects.create(created_at=date, user=user)
-
-    if date:
-        order.created_at = parse_datetime(date)
-        order.save(update_fields=["created_at"])
+    created_at = parse_datetime(date) if date else None
+    order = Order.objects.create(created_at=created_at, user=user)
 
     for data in tickets:
         Ticket.objects.create(movie_session_id=data["movie_session"],
