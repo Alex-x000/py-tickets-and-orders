@@ -74,17 +74,28 @@ class Ticket(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=["row", "seat", "movie_session"], name="Ticket_check")
+            UniqueConstraint(fields=["row", "seat", "movie_session"],
+                             name="Ticket_check")
         ]
 
     def __str__(self) -> str:
-        return f"<Ticket: {self.movie_session.movie.title} {self.movie_session.show_time} (row: {self.row}, seat: {self.seat})>"
+        return (f"<Ticket: {self.movie_session.movie.title} "
+                f"{self.movie_session.show_time} (row: {self.row}, "
+                f"seat: {self.seat})>")
 
     def clean(self) -> None:
-        if self.row > self.movie_session.cinema_hall.rows:
-            raise ValidationError(f"{'row': ['row number must be in available range: (1, rows): (1, {self.self.movie_session.cinema_hall.rows})']}")
-        if self.seat > self.movie_session.cinema_hall.seats_in_row:
-            raise ValidationError(f"{'seat': ['seat number must be in available range: (1, seats_in_row): (1, {self.movie_session.cinema_hall.seats_in_row})']}")
+        max_rows = self.movie_session.cinema_hall.rows
+        max_seats = self.movie_session.cinema_hall.seats_in_row
+        if self.row > max_rows:
+            raise ValidationError(
+                {"row": [f"row number must be in available range: "
+                         f"(1, rows): (1, {max_rows})"]}
+            )
+        if self.seat > max_seats:
+            raise ValidationError(
+                {"seat": [f"seat number must be in available range: "
+                          f"(1, seats_in_row): (1, {max_seats})"]}
+            )
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()
