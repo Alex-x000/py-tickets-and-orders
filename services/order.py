@@ -11,7 +11,6 @@ def create_order(tickets: list, username: str, date: str = None) -> Order:
     order = Order.objects.create(created_at=date, user=user)
 
     if date:
-        from django.utils.dateparse import parse_datetime
         order.created_at = parse_datetime(date)
         order.save(update_fields=["created_at"])
 
