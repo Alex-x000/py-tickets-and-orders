@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
-from django.utils import timezone
+
 
 from db.models import Order, Ticket
 from django.utils.dateparse import parse_datetime
