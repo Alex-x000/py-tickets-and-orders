@@ -9,7 +9,7 @@ def create_order(tickets: list, username: str, date: str = None) -> Order:
     user = User.objects.get(username=username)
     order = Order.objects.create(created_at=date, user=user)
     for data in tickets:
-        Ticket.objects.create(movie_session=data["movie_session"],
+        Ticket.objects.create(movie_session_id=data["movie_session"],
                               order=order,
                               row=data["row"],
                               seat=data["seat"])
